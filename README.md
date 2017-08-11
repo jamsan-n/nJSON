@@ -14,14 +14,14 @@ apache-2.0 license.
 
 # welcom-to-njson 
 
-when I wrote program for some memory limited MCUs like mcs51, I found it's difficult to handle JSON object. All the cJSON library need dynamic allocate memory and generate whole JSON object tree in ram. But some MCU only have 512 Byte or even more less space. So I dedicate this project just for the purpose: I just want pick a element's value from a JSON string, no need parse the whole object. So just handle as string, it will be simple;
+When I wrote programs for some memory limited MCUs like mcs51, I found it's difficult to handle JSON object. Other cJSON library need dynamic allocate memory and generate whole JSON object tree in ram. But some MCU only have 512 Byte or even more less space. So I dedicate this project just for one purpose: I want pick a element's value from a JSON string, no need parse the whole object. So handle as string, it will be simple and easy.
 
-There is no dynamic memory allocation and global variable, all we need restrict in stack space, so never need worry about memory leakage and thread safety.
+There is no dynamic memory allocation and global variable, all we need restrict in function stack space, so never need worry about memory leakage and thread safety.
 
-Generally we need no more then 20 bytes can work for this lib.
+Generally we need no more then 20 bytes can work well for this lib.
 
 
-# how to use
+# how-to-use
 
 import njson.h and njson.c to your project
 
@@ -47,4 +47,4 @@ import njson.h and njson.c to your project
 ```
 ***
 
-- Niu Jiansheng
+- author: Niu Jiansheng
