@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
@@ -205,6 +204,45 @@ int nj_get_bracket_int(t_nstr *s1){
 	return natoi(pos1 + 1, pos2 - pos1);
 }
 
+// 获取array的element个数, 比如[1,2,3],len = 3
+int nj_get_ar_len(const t_nstr *s1){
+	assert(*s1->pos == '[');
+	assert(*(s1->pos + s1->len -1) == ']');
+
+	char stack[NJ_MAX_DEPTH];
+	char stack_top=0;
+	memset(stack,0,sizeof(stack));
+
+	const char *p = s1->pos+1;
+	const char *last_p = p;
+	int len = s1->len -1;
+	int res = 0;
+
+	while(len > 0){
+		if ((*p == '[' || *p == '{') && *(p-1)!='\\'){
+			stack[stack_top++]=*p;
+		}else if((*p == ']' || *p == '}') && 
+				nj_ismatch_char(*p,stack[stack_top-1]) && 
+				*(p-1)!='\\'){
+			stack_top--;
+		}else if(*p == '"' && *(p-1) != '\\'){
+			if (stack_top == 0)
+				stack[stack_top++]=*p;
+			else if(stack[stack_top-1] != '"')
+				stack[stack_top++]=*p;
+			else{
+				stack_top--;
+			}
+		}else if((*p == ',' || len ==1) && stack_top == 0){
+			last_p = p;
+			res ++;
+		}
+		p++;
+		len--;
+	}
+	return res;
+}
+
 //从形如"[1,2]" 或者["12","23"],或者[{"xx":"ss","xx":1},{"xx",}]中获取值
 //找到第index个,号，且,不在配对中
 int nj_get_ar_element(const t_nstr *s1, int index, t_nstr *res){
@@ -320,7 +358,14 @@ int nj_nstr_v(t_nstr *src, t_nstr *dst){
 	return ERR_NJ_OK;
 }
 
-int nj_str_cp(t_nstr *src, char *dst, int max_len){
+int nj_cstr2nstr(const char *src, t_nstr *dst, int max_len){
+	dst->pos = src;
+	dst->len = strlen(src);
+	if ( max_len < dst->len)
+		dst->len = max_len;
+}
+
+int nj_2cstr(t_nstr *src, char *dst, int max_len){
 	assert(src->pos[0] == '"');
 	assert(src->pos[src->len-1] == '"');
 

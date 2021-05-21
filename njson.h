@@ -32,6 +32,7 @@ extern int nj_get_bracket_int(t_nstr *s1);
 // get element string in a json string compose with array
 // ex: nj_get_ar_element({"[11,22,3,4]",8},1) = "22"
 extern int nj_get_ar_element(const t_nstr *s1, int index, t_nstr *res);
+extern int nj_get_ar_len(const t_nstr *s1);
 
 
 // find the element string in a json string
@@ -54,8 +55,9 @@ extern double nj_double_v(t_nstr *p_res);
 extern int nj_nstr_v(t_nstr *src, t_nstr *dst);
 
 //remove both side " from src and copy to standard c string byte buffer;
-//ex: nj_str_cp({"\"ab39ab\"",8},dst,4); dst = "ab39"
-extern int nj_str_cp(t_nstr *src, char *dst, int max_len);
+//ex: nj_2cstr({"\"ab39ab\"",8},dst,4); dst = "ab39"
+extern int nj_2cstr(t_nstr *src, char *dst, int max_len);
+extern int nj_cstr2nstr(const char *src, t_nstr *dst, int max_len);
 
 //copy nstr to  standard c string byte buffer;
 //ex: nj_str2str({"\"ab39ab\"",8},dst,4); dst = "\"ab3"
